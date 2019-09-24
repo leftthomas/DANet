@@ -5,23 +5,21 @@ Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses
 
 from __future__ import absolute_import
 from __future__ import division
+
 import argparse
-from functools import partial
-from config import cfg, assert_and_infer_cfg
 import logging
-import math
 import os
-import sys
 
-import torch
 import numpy as np
+import torch
 
-from utils.misc import AverageMeter, prep_experiment, evaluate_eval, fast_hist
-from utils.f_boundary import eval_mask_boundary
 import datasets
 import loss
 import network
 import optimizer
+from config import cfg, assert_and_infer_cfg
+from utils.f_boundary import eval_mask_boundary
+from utils.misc import AverageMeter, prep_experiment, evaluate_eval, fast_hist
 
 # Argument Parser
 parser = argparse.ArgumentParser(description='GSCNN')
@@ -136,7 +134,7 @@ def main():
 
     if args.evaluate:
         # Early evaluation for benchmarking
-	default_eval_epoch = 1
+        default_eval_epoch = 1
         validate(val_loader, net, criterion_val,
                  optim, default_eval_epoch, writer)
         evaluate(val_loader, net)
