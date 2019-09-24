@@ -31,17 +31,20 @@ Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses
 """
 
 import random
+
 import numpy as np
+import scipy.misc
+import torch
+import torchvision.transforms as torch_tr
+from PIL import Image, ImageEnhance
+from scipy.ndimage.interpolation import shift
 from skimage.filters import gaussian
 from skimage.restoration import denoise_bilateral
-import torch
-from PIL import Image, ImageFilter, ImageEnhance
-import torchvision.transforms as torch_tr
-from scipy import ndimage
-from config import cfg
-from scipy.ndimage.interpolation import shift
-from scipy.misc import imsave
 from skimage.segmentation import find_boundaries
+
+from config import cfg
+
+
 class RandomVerticalFlip(object):
     def __call__(self, img):
         if random.random() < 0.5:
@@ -82,7 +85,8 @@ class RelaxedBoundaryLossToTensor(object):
 
         
         img_arr = np.array(img)
-        import scipy;scipy.misc.imsave('orig.png',img_arr)
+        import scipy
+        scipy.misc.imsave('orig.png', img_arr)
 
         img_arr[img_arr==self.ignore_id]=self.num_classes       
         

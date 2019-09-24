@@ -3,21 +3,24 @@ Copyright (C) 2019 NVIDIA Corporation.  All rights reserved.
 Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
 """
 
-import sys
-import re
-import os
-import shutil
-import torch
-from datetime import datetime
 import logging
-from subprocess import call
+import os
+import re
 import shlex
-from tensorboardX import SummaryWriter
+import shutil
+import sys
+from datetime import datetime
+from subprocess import call
+
 import numpy as np
-from utils.image_page import ImagePage
+import torch
 import torchvision.transforms as standard_transforms
 import torchvision.utils as vutils
 from PIL import Image
+from torch.utils.tensorboard import SummaryWriter
+
+from utils.image_page import ImagePage
+
 
 # Create unique output dir name based on non-default command line args
 def make_exp_name(args, parser):
