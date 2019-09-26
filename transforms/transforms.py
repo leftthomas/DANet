@@ -36,7 +36,6 @@ import numpy as np
 import torch
 import torchvision.transforms as torch_tr
 from PIL import Image, ImageEnhance
-from scipy.misc import imsave
 from scipy.ndimage.interpolation import shift
 from skimage.filters import gaussian
 from skimage.restoration import denoise_bilateral
@@ -85,7 +84,7 @@ class RelaxedBoundaryLossToTensor(object):
 
         
         img_arr = np.array(img)
-        import scipy;
+        import scipy
         scipy.misc.imsave('orig.png', img_arr)
 
         img_arr[img_arr==self.ignore_id]=self.num_classes       

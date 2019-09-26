@@ -17,7 +17,7 @@ import torch
 import torchvision.transforms as standard_transforms
 import torchvision.utils as vutils
 from PIL import Image
-from tensorboardX import SummaryWriter
+from torch.utils.tensorboard import SummaryWriter
 
 from utils.image_page import ImagePage
 

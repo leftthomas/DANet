@@ -51,7 +51,7 @@ __C.REDUCE_BORDER_EPOCH = -1
 __C.STRICTBORDERCLASS = None
 
 __C.DATASET = AttrDict()
-__C.DATASET.CITYSCAPES_DIR = '/home/username/data/cityscapes'
+__C.DATASET.CITYSCAPES_DIR = '/home/data/cityscapes'
 __C.DATASET.CV_SPLITS = 3
 
 __C.MODEL = AttrDict()

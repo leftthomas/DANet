@@ -33,9 +33,9 @@ import torch
 import torch.nn.functional as F
 from torch import nn
 from torch.autograd import Variable
+from torchvision.models.resnet import BasicBlock
 
 from my_functionals import GatedSpatialConv as gsc
-from network import Resnet
 from network.mynn import initialize_weights, Norm2d
 from network.wider_resnet import wider_resnet38_a2
 
@@ -218,11 +218,11 @@ class GSCNN(nn.Module):
         self.dsn4 = nn.Conv2d(512, 1, 1)
         self.dsn7 = nn.Conv2d(4096, 1, 1)
 
-        self.res1 = Resnet.BasicBlock(64, 64, stride=1, downsample=None)
+        self.res1 = BasicBlock(64, 64, stride=1, downsample=None)
         self.d1 = nn.Conv2d(64, 32, 1)
-        self.res2 = Resnet.BasicBlock(32, 32, stride=1, downsample=None)
+        self.res2 = BasicBlock(32, 32, stride=1, downsample=None)
         self.d2 = nn.Conv2d(32, 16, 1)
-        self.res3 = Resnet.BasicBlock(16, 16, stride=1, downsample=None)
+        self.res3 = BasicBlock(16, 16, stride=1, downsample=None)
         self.d3 = nn.Conv2d(16, 8, 1)
         self.fuse = nn.Conv2d(8, 1, kernel_size=1, padding=0, bias=False)
 

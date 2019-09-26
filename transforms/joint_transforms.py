@@ -33,9 +33,11 @@ Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses
 import math
 import numbers
 import random
-from PIL import Image, ImageOps
+
 import numpy as np
-import random
+from PIL import Image, ImageOps
+from scipy.ndimage import generate_binary_structure, maximum_filter, binary_erosion
+
 
 class Compose(object):
     def __init__(self, transforms):
