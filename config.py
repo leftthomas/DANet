@@ -51,14 +51,13 @@ __C.REDUCE_BORDER_EPOCH = -1
 __C.STRICTBORDERCLASS = None
 
 __C.DATASET = AttrDict()
-__C.DATASET.CITYSCAPES_DIR = 'data/cityscapes'
+__C.DATASET.CITYSCAPES_DIR = '/home/username/data/cityscapes'
 __C.DATASET.CV_SPLITS = 3
 
 __C.MODEL = AttrDict()
 __C.MODEL.BN = 'regularnorm'
 __C.MODEL.BNFUNC = torch.nn.BatchNorm2d
 __C.MODEL.BIGMEMORY = False
-
 
 def assert_and_infer_cfg(args, make_immutable=True):
     """Call this function in your script after you have finished setting all cfg

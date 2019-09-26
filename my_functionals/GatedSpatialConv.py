@@ -3,15 +3,19 @@ Copyright (C) 2019 NVIDIA Corporation.  All rights reserved.
 Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
 """
 
-import torch.nn as nn
+import math
+
+import numpy as np
 import torch
+import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn.modules.conv import _ConvNd
 from torch.nn.modules.utils import _pair
-import numpy as np
-import math
-import network.mynn as mynn
+
 import my_functionals.custom_functional as myF
+import network.mynn as mynn
+
+
 class GatedSpatialConv2d(_ConvNd):
     def __init__(self, in_channels, out_channels, kernel_size=1, stride=1,
                  padding=0, dilation=1, groups=1, bias=False):

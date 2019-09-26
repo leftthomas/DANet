@@ -28,12 +28,13 @@ Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses
 # SOFTWARE.
 """
 
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-import numpy as np
 from my_functionals.custom_functional import compute_grad_mag
+
 
 def perturbate_input_(input, n_elements=200):
     N, C, H, W = input.shape

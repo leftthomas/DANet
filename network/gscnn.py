@@ -27,20 +27,18 @@ Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 """
 
+import cv2
+import numpy as np
 import torch
 import torch.nn.functional as F
 from torch import nn
-from network import SEresnext
-from network import Resnet
-from network.wider_resnet import wider_resnet38_a2
-from config import cfg
-from network.mynn import initialize_weights, Norm2d
 from torch.autograd import Variable
 
 from my_functionals import GatedSpatialConv as gsc
+from network import Resnet
+from network.mynn import initialize_weights, Norm2d
+from network.wider_resnet import wider_resnet38_a2
 
-import cv2
-import numpy as np
 
 class Crop(nn.Module):
     def __init__(self, axis, offset):
