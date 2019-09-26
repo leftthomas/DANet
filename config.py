@@ -71,13 +71,13 @@ def assert_and_infer_cfg(args, make_immutable=True):
     if args.batch_weighting:
         __C.BATCH_WEIGHTING = True
 
-    if args.syncbn:
-        import encoding
-        __C.MODEL.BN = 'syncnorm'
-        __C.MODEL.BNFUNC = encoding.nn.BatchNorm2d
-    else:
-        __C.MODEL.BNFUNC = torch.nn.BatchNorm2d
-        print('Using regular batch norm')
+    # if args.syncbn:
+    #     import encoding
+    #     __C.MODEL.BN = 'syncnorm'
+    #     __C.MODEL.BNFUNC = encoding.nn.BatchNorm2d
+    # else:
+    __C.MODEL.BNFUNC = torch.nn.BatchNorm2d
+    print('Using regular batch norm')
 
     if make_immutable:
         cfg.immutable(True)

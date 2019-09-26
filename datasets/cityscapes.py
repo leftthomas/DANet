@@ -3,19 +3,18 @@ Copyright (C) 2019 NVIDIA Corporation.  All rights reserved.
 Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
 """
 
+import logging
 import os
+
 import numpy as np
 import torch
+import torchvision.transforms as transforms
 from PIL import Image
 from torch.utils import data
-from collections import defaultdict
-import math
-import logging
+
 import datasets.cityscapes_labels as cityscapes_labels
-import json
-from config import cfg
-import torchvision.transforms as transforms
 import datasets.edge_utils as edge_utils
+from config import cfg
 
 trainid_to_name = cityscapes_labels.trainId2name
 id_to_trainid = cityscapes_labels.label2trainid
@@ -56,8 +55,8 @@ def make_cv_splits(img_dir_name):
     A split is a lists of cities.
     split0 is aligned with the default Cityscapes train/val.
     '''
-    trn_path = os.path.join(root, img_dir_name, 'leftImg8bit', 'train')
-    val_path = os.path.join(root, img_dir_name, 'leftImg8bit', 'val')
+    trn_path = os.path.join(root, img_dir_name, 'train')
+    val_path = os.path.join(root, img_dir_name, 'val')
 
     trn_cities = ['train/' + c for c in os.listdir(trn_path)]
     val_cities = ['val/' + c for c in os.listdir(val_path)]
@@ -122,9 +121,9 @@ def make_dataset(quality, mode, maxSkip=0, fine_coarse_mult=6, cv_split=0):
 
     if quality == 'fine':
         assert mode in ['train', 'val', 'test', 'trainval']
-        img_dir_name = 'leftImg8bit_trainvaltest'
-        img_path = os.path.join(root, img_dir_name, 'leftImg8bit')
-        mask_path = os.path.join(root, 'gtFine_trainvaltest', 'gtFine')
+        img_dir_name = 'leftImg8bit'
+        img_path = os.path.join(root, img_dir_name)
+        mask_path = os.path.join(root, 'gtFine')
         mask_postfix = '_gtFine_labelIds.png'
         cv_splits = make_cv_splits(img_dir_name)
         if mode == 'trainval':

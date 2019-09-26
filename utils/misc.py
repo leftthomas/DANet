@@ -106,7 +106,7 @@ def prep_experiment(args, parser):
     open(os.path.join(args.exp_path, args.date_str + '.txt'), 'w').write(
         str(args) + '\n\n')
 
-    writer = SummaryWriter(logdir=args.tb_exp_path, comment=args.tb_tag)
+    writer = SummaryWriter(log_dir=args.tb_exp_path, comment=args.tb_tag)
     return writer
 
 class AverageMeter(object):
