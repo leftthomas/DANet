@@ -41,7 +41,7 @@ from skimage.filters import gaussian
 from skimage.restoration import denoise_bilateral
 from skimage.segmentation import find_boundaries
 
-from config import cfg
+from utils.config import cfg
 
 
 class RandomVerticalFlip(object):

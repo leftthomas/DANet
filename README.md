@@ -7,10 +7,6 @@ This is the official code for [Gated-SCNN: Gated Shape CNNs for Semantic Segment
 ```
 conda install pytorch torchvision -c pytorch
 ```
-* torch-encoding
-```
-pip install torch-encoding
-```
 * tensorboard
 ```
 pip install tb-nightly

@@ -39,9 +39,12 @@ Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses
 import sys
 from collections import OrderedDict
 from functools import partial
-import torch.nn as nn
+
 import torch
-import network.mynn as mynn
+import torch.nn as nn
+
+import network.functional as mynn
+
 
 def bnrelu(channels):
     return nn.Sequential(mynn.Norm2d(channels),

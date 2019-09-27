@@ -1,8 +1,3 @@
-"""
-Copyright (C) 2019 NVIDIA Corporation.  All rights reserved.
-Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
-"""
-
 import math
 
 import numpy as np
@@ -12,8 +7,7 @@ import torch.nn.functional as F
 from torch.nn.modules.conv import _ConvNd
 from torch.nn.modules.utils import _pair
 
-import my_functionals.custom_functional as myF
-import network.mynn as mynn
+import network.functional as myF
 
 
 class GatedSpatialConv2d(_ConvNd):
@@ -40,11 +34,11 @@ class GatedSpatialConv2d(_ConvNd):
             False, _pair(0), groups, bias, 'zeros')
 
         self._gate_conv = nn.Sequential(
-            mynn.Norm2d(in_channels+1),
+            myF.Norm2d(in_channels + 1),
             nn.Conv2d(in_channels+1, in_channels+1, 1),
             nn.ReLU(), 
             nn.Conv2d(in_channels+1, 1, 1),
-            mynn.Norm2d(1),
+            myF.Norm2d(1),
             nn.Sigmoid()
         )
 
@@ -71,6 +65,7 @@ class Conv2dPad(nn.Conv2d):
     def forward(self, input):
         return myF.conv2d_same(input,self.weight,self.groups)
 
+
 class HighFrequencyGatedSpatialConv2d(_ConvNd):
     def __init__(self, in_channels, out_channels, kernel_size=1, stride=1,
                  padding=0, dilation=1, groups=1, bias=False):
@@ -95,11 +90,11 @@ class HighFrequencyGatedSpatialConv2d(_ConvNd):
             False, _pair(0), groups, bias)
 
         self._gate_conv = nn.Sequential(
-            mynn.Norm2d(in_channels+1),
+            myF.Norm2d(in_channels + 1),
             nn.Conv2d(in_channels+1, in_channels+1, 1),
             nn.ReLU(), 
             nn.Conv2d(in_channels+1, 1, 1),
-            mynn.Norm2d(1),
+            myF.Norm2d(1),
             nn.Sigmoid()
         )
 
@@ -134,7 +129,7 @@ class HighFrequencyGatedSpatialConv2d(_ConvNd):
  
         self.procdog = nn.Sequential(
             nn.Conv2d(in_channels, in_channels, 1),
-            mynn.Norm2d(in_channels),
+            myF.Norm2d(in_channels),
             nn.Sigmoid()
         )
 

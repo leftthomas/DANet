@@ -1,16 +1,9 @@
-"""
-Copyright (C) 2019 NVIDIA Corporation.  All rights reserved.
-Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
-"""
-
 import logging
 import os
 import re
-import shlex
 import shutil
 import sys
 from datetime import datetime
-from subprocess import call
 
 import numpy as np
 import torch
@@ -18,8 +11,6 @@ import torchvision.transforms as standard_transforms
 import torchvision.utils as vutils
 from PIL import Image
 from torch.utils.tensorboard import SummaryWriter
-
-from utils.image_page import ImagePage
 
 
 # Create unique output dir name based on non-default command line args
@@ -74,17 +65,6 @@ def save_log(prefix, output_dir, date_str):
     #logging.basicConfig(level=logging.INFO, format='%(asctime)s.%(msecs)03d %(levelname)s:\t%(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
 
-def save_code(exp_path, date_str):
-    code_root = '.'  # FIXME!
-    zip_outfile = os.path.join(exp_path, 'code_{}.tgz'.format(date_str))
-    print('Saving code to {}'.format(zip_outfile))
-    cmd = 'tar -czvf {zip_outfile} --exclude=\'*.pyc\' --exclude=\'*.png\' ' +\
-        '--exclude=\'*tfevents*\' {root}/train.py ' + \
-        ' {root}/utils {root}/datasets {root}/models'
-    cmd = cmd.format(zip_outfile=zip_outfile, root=code_root)
-    call(shlex.split(cmd), stdout=open(os.devnull, 'wb'))
-
-
 def prep_experiment(args, parser):
     '''
     Make output directories, setup logging, Tensorboard, snapshot code.
@@ -96,18 +76,16 @@ def prep_experiment(args, parser):
     args.tb_exp_path = os.path.join(tb_path, args.exp, exp_name)
     args.ngpu = torch.cuda.device_count()
     args.date_str = str(datetime.now().strftime('%Y_%m_%d_%H_%M_%S'))
-    args.best_record = {'epoch': -1, 'iter': 0, 'val_loss': 1e10, 'acc': 0,
-                        'acc_cls': 0, 'mean_iu': 0, 'fwavacc': 0}
+    args.best_record = {'epoch': -1, 'iter': 0, 'val_loss': 1e10, 'acc': 0, 'acc_cls': 0, 'mean_iu': 0, 'fwavacc': 0}
     args.last_record = {}
     os.makedirs(args.exp_path, exist_ok=True)
     os.makedirs(args.tb_exp_path, exist_ok=True)
     save_log('log', args.exp_path, args.date_str)
-    #save_code(args.exp_path, args.date_str)
-    open(os.path.join(args.exp_path, args.date_str + '.txt'), 'w').write(
-        str(args) + '\n\n')
+    open(os.path.join(args.exp_path, args.date_str + '.txt'), 'w').write(str(args) + '\n\n')
 
     writer = SummaryWriter(log_dir=args.tb_exp_path, comment=args.tb_tag)
     return writer
+
 
 class AverageMeter(object):
 
@@ -125,7 +103,6 @@ class AverageMeter(object):
         self.sum += val * n
         self.count += n
         self.avg = self.sum / self.count
-
 
 
 def evaluate_eval(args, net, optimizer, val_loss, mf_score, hist, dump_images, heatmap_images, writer, epoch=0, dataset=None, ):
@@ -281,6 +258,79 @@ def fast_hist(label_pred, label_true, num_classes):
         label_pred[mask], minlength=num_classes ** 2).reshape(num_classes, num_classes)
     return hist
 
+
+class ImagePage(object):
+    '''
+    This creates an HTML page of embedded images, useful for showing evaluation results.
+
+    Usage:
+    ip = ImagePage(html_fn)
+
+    # Add a table with N images ...
+    ip.add_table((img, descr), (img, descr), ...)
+
+    # Generate html page
+    ip.write_page()
+    '''
+
+    def __init__(self, experiment_name, html_filename):
+        self.experiment_name = experiment_name
+        self.html_filename = html_filename
+        self.outfile = open(self.html_filename, 'w')
+        self.items = []
+
+    def _print_header(self):
+        header = '''<!DOCTYPE html>
+<html>
+  <head>
+    <title>Experiment = {}</title>
+  </head>
+  <body>'''.format(self.experiment_name)
+        self.outfile.write(header)
+
+    def _print_footer(self):
+        self.outfile.write('''  </body>
+</html>''')
+
+    def _print_table_header(self, table_name):
+        table_hdr = '''    <h3>{}</h3>
+    <table border="1" style="table-layout: fixed;">
+      <tr>'''.format(table_name)
+        self.outfile.write(table_hdr)
+
+    def _print_table_footer(self):
+        table_ftr = '''      </tr>
+    </table>'''
+        self.outfile.write(table_ftr)
+
+    def _print_table_guts(self, img_fn, descr):
+        table = '''        <td halign="center" style="word-wrap: break-word;" valign="top">
+          <p>
+            <a href="{img_fn}">
+              <img src="{img_fn}" style="width:768px">
+            </a><br>
+            <p>{descr}</p>
+          </p>
+        </td>'''.format(img_fn=img_fn, descr=descr)
+        self.outfile.write(table)
+
+    def add_table(self, img_label_pairs):
+        self.items.append(img_label_pairs)
+
+    def _write_table(self, table):
+        img, _descr = table[0]
+        self._print_table_header(os.path.basename(img))
+        for img, descr in table:
+            self._print_table_guts(img, descr)
+        self._print_table_footer()
+
+    def write_page(self):
+        self._print_header()
+
+        for table in self.items:
+            self._write_table(table)
+
+        self._print_footer()
 
 
 def print_evaluate_results(hist, iu, writer=None, epoch=0, dataset=None):

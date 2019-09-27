@@ -14,7 +14,7 @@ from torch.utils import data
 
 import datasets.cityscapes_labels as cityscapes_labels
 import datasets.edge_utils as edge_utils
-from config import cfg
+from utils.config import cfg
 
 trainid_to_name = cityscapes_labels.trainId2name
 id_to_trainid = cityscapes_labels.label2trainid
@@ -40,14 +40,14 @@ def colorize_mask(mask):
 
 
 def add_items(items, aug_items, cities, img_path, mask_path, mask_postfix, mode, maxSkip):
-
     for c in cities:
         c_items = [name.split('_leftImg8bit.png')[0] for name in
                    os.listdir(os.path.join(img_path, c))]
         for it in c_items:
             item = (os.path.join(img_path, c, it + '_leftImg8bit.png'),
-                        os.path.join(mask_path, c, it + mask_postfix))
+                    os.path.join(mask_path, c, it + mask_postfix))
             items.append(item)
+
 
 def make_cv_splits(img_dir_name):
     '''
@@ -91,12 +91,13 @@ def make_split_coarse(img_path):
     '''
     all_cities = os.listdir(img_path)
     all_cities = sorted(all_cities)  # needs to always be the same
-    val_cities = [] # Can manually set cities to not be included into train split
+    val_cities = []  # Can manually set cities to not be included into train split
 
     split = {}
     split['val'] = val_cities
     split['train'] = [c for c in all_cities if c not in val_cities]
     return split
+
 
 def make_test_split(img_dir_name):
     test_path = os.path.join(root, img_dir_name, 'leftImg8bit', 'test')
@@ -134,15 +135,15 @@ def make_dataset(quality, mode, maxSkip=0, fine_coarse_mult=6, cv_split=0):
             if mode == 'test':
                 cv_splits = make_test_split(img_dir_name)
                 add_items(items, cv_splits, img_path, mask_path,
-                      mask_postfix)
+                          mask_postfix)
             else:
                 logging.info('{} fine cities: '.format(mode) + str(cv_splits[cv_split][mode]))
 
                 add_items(items, aug_items, cv_splits[cv_split][mode], img_path, mask_path,
-                      mask_postfix, mode, maxSkip)
+                          mask_postfix, mode, maxSkip)
     else:
         raise 'unknown cityscapes quality {}'.format(quality)
-    logging.info('Cityscapes-{}: {} images'.format(mode, len(items)+len(aug_items)))
+    logging.info('Cityscapes-{}: {} images'.format(mode, len(items) + len(aug_items)))
     return items, aug_items
 
 
@@ -150,7 +151,7 @@ class CityScapes(data.Dataset):
 
     def __init__(self, quality, mode, maxSkip=0, joint_transform=None, sliding_crop=None,
                  transform=None, target_transform=None, dump_images=False,
-                 cv_split=None, eval_mode=False, 
+                 cv_split=None, eval_mode=False,
                  eval_scales=None, eval_flip=False):
         self.quality = quality
         self.mode = mode
@@ -181,21 +182,19 @@ class CityScapes(data.Dataset):
 
     def _eval_get_item(self, img, mask, scales, flip_bool):
         return_imgs = []
-        for flip in range(int(flip_bool)+1):
+        for flip in range(int(flip_bool) + 1):
             imgs = []
-            if flip :
+            if flip:
                 img = img.transpose(Image.FLIP_LEFT_RIGHT)
             for scale in scales:
-                w,h = img.size
-                target_w, target_h = int(w * scale), int(h * scale) 
-                resize_img =img.resize((target_w, target_h))
+                w, h = img.size
+                target_w, target_h = int(w * scale), int(h * scale)
+                resize_img = img.resize((target_w, target_h))
                 tensor_img = transforms.ToTensor()(resize_img)
                 final_tensor = transforms.Normalize(*self.mean_std)(tensor_img)
                 imgs.append(tensor_img)
             return_imgs.append(imgs)
         return return_imgs, mask
-        
-
 
     def __getitem__(self, index):
 
@@ -228,8 +227,8 @@ class CityScapes(data.Dataset):
         _edgemap = edge_utils.onehot_to_binary_edges(_edgemap, 2, num_classes)
 
         edgemap = torch.from_numpy(_edgemap).float()
-        
-	# Debug
+
+        # Debug
         if self.dump_images:
             outdir = '../../dump_imgs_{}'.format(self.mode)
             os.makedirs(outdir, exist_ok=True)
@@ -278,4 +277,3 @@ class CityScapesVideo(data.Dataset):
 
     def __len__(self):
         return len(self.imgs)
-

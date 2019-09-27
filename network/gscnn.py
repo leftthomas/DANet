@@ -35,8 +35,8 @@ from torch import nn
 from torch.autograd import Variable
 from torchvision.models.resnet import BasicBlock
 
-from my_functionals import GatedSpatialConv as gsc
-from network.mynn import initialize_weights, Norm2d
+from network import module as gsc
+from network.functional import initialize_weights, Norm2d
 from network.wider_resnet import wider_resnet38_a2
 
 
