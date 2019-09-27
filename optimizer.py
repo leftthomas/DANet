@@ -11,7 +11,6 @@ from torch import optim
 
 
 def get_optimizer(args, net):
-
     param_groups = net.parameters()
 
     if args.sgd:
@@ -21,9 +20,9 @@ def get_optimizer(args, net):
                               momentum=args.momentum,
                               nesterov=False)
     elif args.adam:
-        amsgrad=False
+        amsgrad = False
         if args.amsgrad:
-            amsgrad=True
+            amsgrad = True
         optimizer = optim.Adam(param_groups,
                                lr=args.lr,
                                weight_decay=args.weight_decay,
@@ -46,14 +45,15 @@ def get_optimizer(args, net):
 
     return optimizer, scheduler
 
+
 def restore_snapshot(args, net, optimizer, snapshot):
     checkpoint = torch.load(snapshot, map_location=torch.device('cpu'))
     logging.info("Load Compelete")
     if args.sgd_finetuned:
-     print('skipping load optimizer')
+        print('skipping load optimizer')
     else:
         if 'optimizer' in checkpoint and args.restore_optimizer:
-                optimizer.load_state_dict(checkpoint['optimizer'])
+            optimizer.load_state_dict(checkpoint['optimizer'])
 
     if 'state_dict' in checkpoint:
         net = forgiving_state_restore(net, checkpoint['state_dict'])
@@ -61,6 +61,7 @@ def restore_snapshot(args, net, optimizer, snapshot):
         net = forgiving_state_restore(net, checkpoint)
 
     return net, optimizer
+
 
 def forgiving_state_restore(net, loaded_dict):
     # Handle partial loading when some tensors don't match up in size.
@@ -76,4 +77,3 @@ def forgiving_state_restore(net, loaded_dict):
     net_state_dict.update(new_loaded_dict)
     net.load_state_dict(net_state_dict)
     return net
-

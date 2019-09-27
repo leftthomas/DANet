@@ -50,6 +50,7 @@ def bnrelu(channels):
     return nn.Sequential(mynn.Norm2d(channels),
                          nn.ReLU(inplace=True))
 
+
 class GlobalAvgPool2d(nn.Module):
 
     def __init__(self):
@@ -105,7 +106,6 @@ class IdentityResidualBlock(nn.Module):
 
         # Check if we are using distributed BN and use the nn from encoding.nn
         # library rather than using standard pytorch.nn
-
 
         # Check parameters for inconsistencies
         if len(channels) != 2 and len(channels) != 3:
@@ -178,8 +178,6 @@ class IdentityResidualBlock(nn.Module):
         out = self.convs(bn1)
         out.add_(shortcut)
         return out
-
-
 
 
 class WiderResNet(nn.Module):
@@ -292,7 +290,6 @@ class WiderResNetA2(nn.Module):
         self.dist_bn = dist_bn
 
         # If using distributed batch norm, use the encoding.nn as oppose to torch.nn
-
 
         nn.Dropout = nn.Dropout2d
         norm_act = bnrelu

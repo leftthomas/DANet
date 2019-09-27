@@ -66,62 +66,60 @@ class MaskToTensor(object):
     def __call__(self, img):
         return torch.from_numpy(np.array(img, dtype=np.int32)).long()
 
+
 class RelaxedBoundaryLossToTensor(object):
-    def __init__(self,ignore_id, num_classes):
-        self.ignore_id=ignore_id
-        self.num_classes= num_classes
+    def __init__(self, ignore_id, num_classes):
+        self.ignore_id = ignore_id
+        self.num_classes = num_classes
 
-
-    def new_one_hot_converter(self,a):
-        ncols = self.num_classes+1
-        out = np.zeros( (a.size,ncols), dtype=np.uint8)
-        out[np.arange(a.size),a.ravel()] = 1
+    def new_one_hot_converter(self, a):
+        ncols = self.num_classes + 1
+        out = np.zeros((a.size, ncols), dtype=np.uint8)
+        out[np.arange(a.size), a.ravel()] = 1
         out.shape = a.shape + (ncols,)
         return out
 
-    def __call__(self,img):
-        
+    def __call__(self, img):
 
-        
         img_arr = np.array(img)
         import scipy
         scipy.misc.imsave('orig.png', img_arr)
 
-        img_arr[img_arr==self.ignore_id]=self.num_classes       
-        
+        img_arr[img_arr == self.ignore_id] = self.num_classes
+
         if cfg.STRICTBORDERCLASS != None:
             one_hot_orig = self.new_one_hot_converter(img_arr)
-            mask = np.zeros((img_arr.shape[0],img_arr.shape[1]))
+            mask = np.zeros((img_arr.shape[0], img_arr.shape[1]))
             for cls in cfg.STRICTBORDERCLASS:
-                mask = np.logical_or(mask,(img_arr == cls))
+                mask = np.logical_or(mask, (img_arr == cls))
         one_hot = 0
 
-        #print(cfg.EPOCH, "Non Reduced", cfg.TRAIN.REDUCE_RELAXEDITERATIONCOUNT)
+        # print(cfg.EPOCH, "Non Reduced", cfg.TRAIN.REDUCE_RELAXEDITERATIONCOUNT)
         border = cfg.BORDER_WINDOW
-        if (cfg.REDUCE_BORDER_EPOCH !=-1 and cfg.EPOCH > cfg.REDUCE_BORDER_EPOCH):
+        if (cfg.REDUCE_BORDER_EPOCH != -1 and cfg.EPOCH > cfg.REDUCE_BORDER_EPOCH):
             border = border // 2
             border_prediction = find_boundaries(img_arr, mode='thick').astype(np.uint8)
             print(cfg.EPOCH, "Reduced")
-        
-        for i in range(-border,border+1):
-            for j in range(-border, border+1):
-                shifted= shift(img_arr,(i,j), cval=self.num_classes)
-                one_hot += self.new_one_hot_converter(shifted)       
-        
-        one_hot[one_hot>1] = 1
-        
-        if cfg.STRICTBORDERCLASS != None:
-            one_hot = np.where(np.expand_dims(mask,2), one_hot_orig, one_hot)
-    
-        one_hot = np.moveaxis(one_hot,-1,0)
-    
 
-        if (cfg.REDUCE_BORDER_EPOCH !=-1 and cfg.EPOCH > cfg.REDUCE_BORDER_EPOCH):
-                one_hot = np.where(border_prediction,2*one_hot,1*one_hot)
-                print(one_hot.shape)
+        for i in range(-border, border + 1):
+            for j in range(-border, border + 1):
+                shifted = shift(img_arr, (i, j), cval=self.num_classes)
+                one_hot += self.new_one_hot_converter(shifted)
+
+        one_hot[one_hot > 1] = 1
+
+        if cfg.STRICTBORDERCLASS != None:
+            one_hot = np.where(np.expand_dims(mask, 2), one_hot_orig, one_hot)
+
+        one_hot = np.moveaxis(one_hot, -1, 0)
+
+        if (cfg.REDUCE_BORDER_EPOCH != -1 and cfg.EPOCH > cfg.REDUCE_BORDER_EPOCH):
+            one_hot = np.where(border_prediction, 2 * one_hot, 1 * one_hot)
+            print(one_hot.shape)
         return torch.from_numpy(one_hot).byte()
-        #return torch.from_numpy(one_hot).float()
+        # return torch.from_numpy(one_hot).float()
         exit(0)
+
 
 class ResizeHeight(object):
     def __init__(self, size, interpolation=Image.BILINEAR):
@@ -148,6 +146,7 @@ class FlipChannels(object):
         img = np.array(img)[:, :, ::-1]
         return Image.fromarray(img.astype(np.uint8))
 
+
 class RandomGaussianBlur(object):
     def __call__(self, img):
         sigma = 0.15 + random.random() * 1.15
@@ -158,10 +157,11 @@ class RandomGaussianBlur(object):
 
 class RandomBilateralBlur(object):
     def __call__(self, img):
-        sigma = random.uniform(0.05,0.75)
+        sigma = random.uniform(0.05, 0.75)
         blurred_img = denoise_bilateral(np.array(img), sigma_spatial=sigma, multichannel=True)
         blurred_img *= 255
         return Image.fromarray(blurred_img.astype(np.uint8))
+
 
 try:
     import accimage
@@ -259,7 +259,7 @@ def adjust_hue(img, hue_factor):
     Returns:
         PIL Image: Hue adjusted image.
     """
-    if not(-0.5 <= hue_factor <= 0.5):
+    if not (-0.5 <= hue_factor <= 0.5):
         raise ValueError('hue_factor is not in [-0.5, 0.5].'.format(hue_factor))
 
     if not _is_pil_image(img):
@@ -294,6 +294,7 @@ class ColorJitter(object):
         hue(float): How much to jitter hue. hue_factor is chosen uniformly from
             [-hue, hue]. Should be >=0 and <= 0.5.
     """
+
     def __init__(self, brightness=0, contrast=0, saturation=0, hue=0):
         self.brightness = brightness
         self.contrast = contrast

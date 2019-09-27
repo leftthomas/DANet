@@ -1,6 +1,5 @@
 import math
 
-import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -156,25 +155,3 @@ class HighFrequencyGatedSpatialConv2d(_ConvNd):
         nn.init.xavier_normal_(self.weight)
         if self.bias is not None:
             nn.init.zeros_(self.bias)
-
-def t():
-    import matplotlib.pyplot as plt
-
-    canny_map_filters_in = 8
-    canny_map = np.random.normal(size=(1, canny_map_filters_in, 10, 10))  # NxCxHxW
-    resnet_map = np.random.normal(size=(1, 1, 10, 10))  # NxCxHxW
-    plt.imshow(canny_map[0, 0])
-    plt.show()
-
-    canny_map = torch.from_numpy(canny_map).float()
-    resnet_map = torch.from_numpy(resnet_map).float()
-
-    gconv = GatedSpatialConv2d(canny_map_filters_in, canny_map_filters_in,
-                               kernel_size=3, stride=1, padding=1)
-    output_map = gconv(canny_map, resnet_map)
-    print('done')
-
-
-if __name__ == "__main__":
-    t()
-

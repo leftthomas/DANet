@@ -67,17 +67,6 @@ def eval_mask_boundary(seg_mask, gt_mask, num_classes, num_proc=10, bound_th=0.0
     return Fpc, Fc
 
 
-# def db_eval_boundary_wrapper_wrapper(args):
-#    seg_mask, gt_mask, class_id, batch_size, Fpc = args
-#    print("class_id:" + str(class_id))
-#    p = Pool(processes=10)
-#    args = [((seg_mask[i] == class_id).astype(np.uint8),
-#             (gt_mask[i] == class_id).astype(np.uint8))
-#             for i in range(batch_size)]
-#    Fs = p.map(db_eval_boundary_wrapper, args)
-#    Fpc[class_id] = sum(Fs)
-#    return
-
 def db_eval_boundary_wrapper(args):
     foreground_mask, gt_mask, ignore, bound_th = args
     return db_eval_boundary(foreground_mask, gt_mask, ignore, bound_th)
@@ -409,17 +398,6 @@ def eval_mask_boundary(seg_mask, gt_mask, num_classes, num_proc=10, bound_th=0.0
         Fpc[class_id] = sum(Fs)
     return Fpc, Fc
 
-
-# def db_eval_boundary_wrapper_wrapper(args):
-#    seg_mask, gt_mask, class_id, batch_size, Fpc = args
-#    print("class_id:" + str(class_id))
-#    p = Pool(processes=10)
-#    args = [((seg_mask[i] == class_id).astype(np.uint8),
-#             (gt_mask[i] == class_id).astype(np.uint8))
-#             for i in range(batch_size)]
-#    Fs = p.map(db_eval_boundary_wrapper, args)
-#    Fpc[class_id] = sum(Fs)
-#    return
 
 def db_eval_boundary_wrapper(args):
     foreground_mask, gt_mask, ignore, bound_th = args
