@@ -47,7 +47,8 @@ mmdetection
 ```
 The cityscapes annotations have to be converted into the coco format using the [cityscapesScripts](https://github.com/mcordts/cityscapesScripts) toolbox.
 We plan to provide an easy to use conversion script. For the moment we recommend following the instructions provided in the 
-[maskrcnn-benchmark](https://github.com/facebookresearch/maskrcnn-benchmark/tree/master/maskrcnn_benchmark/data) toolbox. When using this script all images have to be moved into the same folder. On linux systems this can e.g. be done for the train images with:
+[maskrcnn-benchmark](https://github.com/facebookresearch/maskrcnn-benchmark/tree/master/maskrcnn_benchmark/data) toolbox. 
+When using this script all images have to be moved into the same folder. On linux systems this can e.g. be done for the train images with:
 ```shell
 cd data/cityscapes/
 mv train/*/* train/
