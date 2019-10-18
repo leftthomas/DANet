@@ -1,60 +1,83 @@
-# GSCNN
-This is the official code for [Gated-SCNN: Gated Shape CNNs for Semantic Segmentation](https://arxiv.org/abs/1907.05740).
+# MBPL
+A PyTorch implementation of MBPL based on CVPR 2020 paper 
+[MBPL: Multiple Branches with Progressive Learning for KeyPoint Detection](https://arxiv.org/abs/1910.11490). 
 
 ## Requirements
-* [Anaconda](https://www.anaconda.com/download/)
-* PyTorch
+- [Anaconda](https://www.anaconda.com/download/)
+- PyTorch
 ```
-conda install pytorch torchvision -c pytorch
+conda install pytorch torchvision cudatoolkit=10.1 -c pytorch
 ```
-* tensorboard
+- opencv
 ```
-pip install tb-nightly
+pip install opencv-python
 ```
-- mmcv
+- pycocotools
 ```
-pip install mmcv
+pip install git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI
 ```
-- mmdetection
+- fvcore
 ```
-python setup.py develop
+pip install git+https://github.com/facebookresearch/fvcore
 ```
-
-## Prepare datasets
-
-It is recommended to symlink the dataset root to `$MMDETECTION/data`.
-If your folder structure is different, you may need to change the corresponding paths in config files.
-
+- detectron2
 ```
-mmdetection
-├── mmdet
-├── tools
-├── configs
-├── data
-│   ├── coco
-│   │   ├── annotations
-│   │   ├── train2017
-│   │   ├── val2017
-│   │   ├── test2017
-│   ├── cityscapes
-│   │   ├── annotations
-│   │   ├── train
-│   │   ├── val
-│   ├── VOCdevkit
-│   │   ├── VOC2007
-│   │   ├── VOC2012
-
-```
-The cityscapes annotations have to be converted into the coco format using the [cityscapesScripts](https://github.com/mcordts/cityscapesScripts) toolbox.
-We plan to provide an easy to use conversion script. For the moment we recommend following the instructions provided in the 
-[maskrcnn-benchmark](https://github.com/facebookresearch/maskrcnn-benchmark/tree/master/maskrcnn_benchmark/data) toolbox. 
-When using this script all images have to be moved into the same folder. On linux systems this can e.g. be done for the train images with:
-```shell
-cd data/cityscapes/
-mv train/*/* train/
+pip install git+https://github.com/facebookresearch/detectron2.git@master
 ```
 
-## Scripts
+## Training
+To train a model, run
+```bash
+python train_net.py --config-file <config.yaml>
+```
 
-[Here](https://gist.github.com/hellock/bf23cd7348c727d69d48682cb6909047) is
-a script for setting up mmdetection with conda.
+For example, to launch end-to-end R-CNN training with ResNet-50 backbone on 8 GPUs,
+one should execute:
+```bash
+python train_net.py --config-file configs/r50.yaml --num-gpus 8
+```
+
+## Evaluation
+Model evaluation can be done similarly:
+```bash
+python train_net.py --config-file configs/r50.yaml --num-gpus 8 --eval-only MODEL.WEIGHTS checkpoints/model.pth
+```
+
+## COCO Person Keypoint Detection Baselines with Keypoint R-CNN
+<table><tbody>
+<!-- START TABLE -->
+<!-- TABLE HEADER -->
+<th valign="bottom">Name</th>
+<th valign="bottom">lr<br/>sched</th>
+<th valign="bottom">train<br/>time<br/>(s/iter)</th>
+<th valign="bottom">inference<br/>time<br/>(s/im)</th>
+<th valign="bottom">train<br/>mem<br/>(GB)</th>
+<th valign="bottom">box<br/>AP</th>
+<th valign="bottom">kp.<br/>AP</th>
+<th valign="bottom">model id</th>
+<th valign="bottom">download</th>
+<!-- TABLE BODY -->
+<!-- ROW: keypoint_rcnn_R_50_FPN_1x -->
+ <tr><td align="left"><a href="configs/r50_fpn.yaml">R50-FPN</a></td>
+<td align="center">1x</td>
+<td align="center">0.315</td>
+<td align="center">0.102</td>
+<td align="center">5.0</td>
+<td align="center">53.6</td>
+<td align="center">64.0</td>
+<td align="center">137261548</td>
+<td align="center"><a href="https://dl.fbaipublicfiles.com/detectron2/COCO-Keypoints/keypoint_rcnn_R_50_FPN_1x/137261548/model_final_04e291.pkl">model</a>&nbsp;|&nbsp;<a href="https://dl.fbaipublicfiles.com/detectron2/COCO-Keypoints/keypoint_rcnn_R_50_FPN_1x/137261548/metrics.json">metrics</a></td>
+</tr>
+</tbody></table>
+
+## <a name="CitingTridentNet"></a>Citing TridentNet
+If you use TridentNet, please use the following BibTeX entry.
+
+```
+@InProceedings{li2019scale,
+  title={Scale-Aware Trident Networks for Object Detection},
+  author={Li, Yanghao and Chen, Yuntao and Wang, Naiyan and Zhang, Zhaoxiang},
+  journal={The International Conference on Computer Vision (ICCV)},
+  year={2019}
+}
+```
