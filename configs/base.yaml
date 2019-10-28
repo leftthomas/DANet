@@ -6,6 +6,7 @@ MODEL:
     NORM: "SyncBN"
   SEM_SEG_HEAD:
     NAME: "DANetHead"
+    COMMON_STRIDE: 8
     IN_FEATURES: ["res5"]
 SOLVER:
   BASE_LR: 0.01
