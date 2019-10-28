@@ -4,7 +4,6 @@ MODEL:
     NAME: "build_dilated_resnet_backbone"
   DILATED_RESNET:
     NORM: "SyncBN"
-    OUT_FEATURES: ["res5"]
   SEM_SEG_HEAD:
     NAME: "DANetHead"
     IN_FEATURES: ["res5"]

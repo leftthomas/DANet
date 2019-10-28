@@ -10,12 +10,6 @@ from torch.nn import functional as F
 
 @SEM_SEG_HEADS_REGISTRY.register()
 class DANetHead(nn.Module):
-    """
-    A semantic segmentation head described in detail in the Panoptic Feature Pyramid Networks paper
-    (https://arxiv.org/abs/1901.02446). It takes FPN features as input and merges information from
-    all levels of the FPN into single output.
-    """
-
     def __init__(self, cfg, input_shape: Dict[str, ShapeSpec]):
         super().__init__()
 

@@ -12,6 +12,41 @@ from detectron2.modeling.backbone.build import BACKBONE_REGISTRY
 from torch import nn
 
 
+class BasicStem(nn.Module):
+    def __init__(self, in_channels=3, out_channels=64, norm="BN"):
+        """
+        Args:
+            norm (str or callable): a callable that takes the number of
+                channels and return a `nn.Module`, or a pre-defined string
+                (one of {"FrozenBN", "BN", "GN"}).
+        """
+        super().__init__()
+        self.conv1 = Conv2d(
+            in_channels,
+            out_channels,
+            kernel_size=7,
+            stride=2,
+            padding=3,
+            bias=False,
+            norm=get_norm(norm, out_channels),
+        )
+        weight_init.c2_msra_fill(self.conv1)
+
+    def forward(self, x):
+        x = self.conv1(x)
+        x = F.relu_(x)
+        x = F.max_pool2d(x, kernel_size=3, stride=2, padding=1)
+        return x
+
+    @property
+    def out_channels(self):
+        return self.conv1.out_channels
+
+    @property
+    def stride(self):
+        return 4  # = stride 2 conv -> stride 2 max pool
+
+
 class ResNetBlockBase(nn.Module):
     def __init__(self, in_channels, out_channels, stride):
         """
@@ -144,42 +179,7 @@ def make_stage(block_class, num_blocks, first_stride, **kwargs):
     return blocks
 
 
-class BasicStem(nn.Module):
-    def __init__(self, in_channels=3, out_channels=64, norm="BN"):
-        """
-        Args:
-            norm (str or callable): a callable that takes the number of
-                channels and return a `nn.Module`, or a pre-defined string
-                (one of {"FrozenBN", "BN", "GN"}).
-        """
-        super().__init__()
-        self.conv1 = Conv2d(
-            in_channels,
-            out_channels,
-            kernel_size=7,
-            stride=2,
-            padding=3,
-            bias=False,
-            norm=get_norm(norm, out_channels),
-        )
-        weight_init.c2_msra_fill(self.conv1)
-
-    def forward(self, x):
-        x = self.conv1(x)
-        x = F.relu_(x)
-        x = F.max_pool2d(x, kernel_size=3, stride=2, padding=1)
-        return x
-
-    @property
-    def out_channels(self):
-        return self.conv1.out_channels
-
-    @property
-    def stride(self):
-        return 4  # = stride 2 conv -> stride 2 max pool
-
-
-class ResNet(Backbone):
+class DilatedResNet(Backbone):
     def __init__(self, stem, stages, num_classes=None, out_features=None):
         """
         Args:
@@ -191,7 +191,7 @@ class ResNet(Backbone):
                 be returned in forward. Can be anything in "stem", "linear", or "res2" ...
                 If None, will return the output of the last layer.
         """
-        super(ResNet, self).__init__()
+        super(DilatedResNet, self).__init__()
         self.stem = stem
         self.num_classes = num_classes
 
@@ -216,10 +216,6 @@ class ResNet(Backbone):
         if num_classes is not None:
             self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
             self.linear = nn.Linear(curr_channels, num_classes)
-
-            # Sec 5.1 in "Accurate, Large Minibatch SGD: Training ImageNet in 1 Hour":
-            # "The 1000-way fully-connected layer is initialized by
-            # drawing weights from a zero-mean Gaussian with standard deviation of 0.01."
             nn.init.normal_(self.linear.weight, stddev=0.01)
             name = "linear"
 
@@ -259,30 +255,30 @@ class ResNet(Backbone):
 @BACKBONE_REGISTRY.register()
 def build_dilated_resnet_backbone(cfg, input_shape):
     """
-    Create a ResNet instance from config.
+    Create a Dilated ResNet instance from config.
     Returns:
-        ResNet: a :class:`ResNet` instance.
+        DilatedResNet: a :class:`DilatedResNet` instance.
     """
     # need registration of new blocks/stems?
-    norm = cfg.MODEL.RESNETS.NORM
+    norm = cfg.MODEL.DILATED_RESNET.NORM
     stem = BasicStem(
         in_channels=input_shape.channels,
-        out_channels=cfg.MODEL.RESNETS.STEM_OUT_CHANNELS,
+        out_channels=cfg.MODEL.DILATED_RESNET.STEM_OUT_CHANNELS,
         norm=norm,
     )
 
     # fmt: off
-    out_features = cfg.MODEL.RESNETS.OUT_FEATURES
-    depth = cfg.MODEL.RESNETS.DEPTH
-    num_groups = cfg.MODEL.RESNETS.NUM_GROUPS
-    width_per_group = cfg.MODEL.RESNETS.WIDTH_PER_GROUP
+    out_features = cfg.MODEL.DILATED_RESNET.OUT_FEATURES
+    depth = cfg.MODEL.DILATED_RESNET.DEPTH
+    num_groups = cfg.MODEL.DILATED_RESNET.NUM_GROUPS
+    width_per_group = cfg.MODEL.DILATED_RESNET.WIDTH_PER_GROUP
     bottleneck_channels = num_groups * width_per_group
-    in_channels = cfg.MODEL.RESNETS.STEM_OUT_CHANNELS
-    out_channels = cfg.MODEL.RESNETS.RES2_OUT_CHANNELS
-    stride_in_1x1 = cfg.MODEL.RESNETS.STRIDE_IN_1X1
-    res5_dilation = cfg.MODEL.RESNETS.RES5_DILATION
+    in_channels = cfg.MODEL.DILATED_RESNET.STEM_OUT_CHANNELS
+    out_channels = cfg.MODEL.DILATED_RESNET.RES2_OUT_CHANNELS
+    stride_in_1x1 = cfg.MODEL.DILATED_RESNET.STRIDE_IN_1X1
+    res4_dilation = cfg.MODEL.DILATED_RESNET.RES4_DILATION
+    res5_dilation = cfg.MODEL.DILATED_RESNET.RES5_DILATION
     # fmt: on
-    assert res5_dilation in {1, 2}, "res5_dilation cannot be {}.".format(res5_dilation)
 
     num_blocks_per_stage = {50: [3, 4, 6, 3], 101: [3, 4, 23, 3], 152: [3, 8, 36, 3]}[depth]
 
@@ -293,24 +289,21 @@ def build_dilated_resnet_backbone(cfg, input_shape):
     out_stage_idx = [{"res2": 2, "res3": 3, "res4": 4, "res5": 5}[f] for f in out_features]
     max_stage_idx = max(out_stage_idx)
     for idx, stage_idx in enumerate(range(2, max_stage_idx + 1)):
-        dilation = res5_dilation if stage_idx == 5 else 1
-        first_stride = 1 if idx == 0 or (stage_idx == 5 and dilation == 2) else 2
-        stage_kargs = {
-            "num_blocks": num_blocks_per_stage[idx],
-            "first_stride": first_stride,
-            "in_channels": in_channels,
-            "bottleneck_channels": bottleneck_channels,
-            "out_channels": out_channels,
-            "num_groups": num_groups,
-            "norm": norm,
-            "stride_in_1x1": stride_in_1x1,
-            "dilation": dilation,
-        }
-        stage_kargs["block_class"] = BottleneckBlock
+        if stage_idx == 4:
+            dilation = res4_dilation
+        elif stage_idx == 5:
+            dilation = res5_dilation
+        else:
+            dilation = 1
+        first_stride = 1 if idx == 0 or (stage_idx == 4 and dilation == 2) or (stage_idx == 5 and dilation == 4) else 2
+        stage_kargs = {"num_blocks": num_blocks_per_stage[idx], "first_stride": first_stride,
+                       "in_channels": in_channels, "bottleneck_channels": bottleneck_channels,
+                       "out_channels": out_channels, "num_groups": num_groups, "norm": norm,
+                       "stride_in_1x1": stride_in_1x1, "dilation": dilation, "block_class": BottleneckBlock}
         blocks = make_stage(**stage_kargs)
         in_channels = out_channels
         out_channels *= 2
         bottleneck_channels *= 2
 
         stages.append(blocks)
-    return ResNet(stem, stages, out_features=out_features)
+    return DilatedResNet(stem, stages, out_features=out_features)
