@@ -2,10 +2,10 @@ _BASE_: "base.yaml"
 MODEL:
   WEIGHTS: "detectron2://ImageNetPretrained/MSRA/R-50.pkl"
   SEM_SEG_HEAD:
-    NUM_CLASSES: 21
+    NUM_CLASSES: 19
   DILATED_RESNET:
     DEPTH: 50
 DATASETS:
-  TRAIN: ("voc_2012_train",)
-  TEST: ("voc_2012_val",)
-OUTPUT_DIR: "./output/r50/voc"
+  TRAIN: ("cityscapes_fine_sem_seg_train",)
+  TEST: ("cityscapes_fine_sem_seg_val",)
+OUTPUT_DIR: "./output/r50"
