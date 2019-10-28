@@ -1,6 +1,5 @@
-# MBPL
-A PyTorch implementation of MBPL based on CVPR 2020 paper 
-[MBPL: Multiple Branches with Progressive Learning for KeyPoint Detection](https://arxiv.org/abs/1910.11490). 
+# DANet
+A PyTorch implementation of DANet based on CVPR 2019 paper [Dual Attention Network for Scene Segmentation](https://arxiv.org/abs/1809.02983). 
 
 ## Requirements
 - [Anaconda](https://www.anaconda.com/download/)
@@ -24,9 +23,42 @@ pip install git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAP
 ```
 pip install git+https://github.com/facebookresearch/fvcore
 ```
+- cityscapesScripts
+```
+pip install git+https://github.com/mcordts/cityscapesScripts.git
+```
 - detectron2
 ```
 pip install git+https://github.com/facebookresearch/detectron2.git@master
+```
+
+## Datasets
+For a few datasets that detectron2 natively supports, the datasets are assumed to exist in a directory called
+`datasets/`, under the directory where you launch the program. They need to have the following directory structure:
+
+### Expected dataset structure for Cityscapes:
+```
+cityscapes/
+  gtFine/
+    train/
+      aachen/
+        color.png, instanceIds.png, labelIds.png, polygons.json,
+        labelTrainIds.png
+      ...
+    val/
+    test/
+  leftImg8bit/
+    train/
+    val/
+    test/
+```
+
+### Expected dataset structure for Pascal VOC:
+```
+VOC20{07,12}/
+  Annotations/
+  ImageSets/
+  JPEGImages/
 ```
 
 ## Training
@@ -35,7 +67,7 @@ To train a model, run
 python train_net.py --config-file <config.yaml>
 ```
 
-For example, to launch end-to-end R-CNN training with ResNet-50 backbone on 8 GPUs,
+For example, to launch end-to-end DANet training with ResNet-50 backbone on 8 GPUs,
 one should execute:
 ```bash
 python train_net.py --config-file configs/r50.yaml --num-gpus 8
@@ -73,15 +105,3 @@ python train_net.py --config-file configs/r50.yaml --num-gpus 8 --eval-only MODE
 <td align="center"><a href="https://dl.fbaipublicfiles.com/detectron2/COCO-Keypoints/keypoint_rcnn_R_50_FPN_1x/137261548/model_final_04e291.pkl">model</a>&nbsp;|&nbsp;<a href="https://dl.fbaipublicfiles.com/detectron2/COCO-Keypoints/keypoint_rcnn_R_50_FPN_1x/137261548/metrics.json">metrics</a></td>
 </tr>
 </tbody></table>
-
-## <a name="CitingTridentNet"></a>Citing TridentNet
-If you use TridentNet, please use the following BibTeX entry.
-
-```
-@InProceedings{li2019scale,
-  title={Scale-Aware Trident Networks for Object Detection},
-  author={Li, Yanghao and Chen, Yuntao and Wang, Naiyan and Zhang, Zhaoxiang},
-  journal={The International Conference on Computer Vision (ICCV)},
-  year={2019}
-}
-```
