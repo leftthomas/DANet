@@ -8,6 +8,4 @@ MODEL:
 DATASETS:
   TRAIN: ("coco_2017_train_panoptic_stuffonly",)
   TEST: ("coco_2017_val_panoptic_stuffonly",)
-SOLVER:
-  IMS_PER_BATCH: 16
 OUTPUT_DIR: "./output/r101/coco"

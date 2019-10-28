@@ -8,6 +8,4 @@ MODEL:
 DATASETS:
   TRAIN: ("cityscapes_fine_sem_seg_train",)
   TEST: ("cityscapes_fine_sem_seg_val",)
-SOLVER:
-  IMS_PER_BATCH: 8
 OUTPUT_DIR: "./output/r50/cityscapes"

@@ -112,10 +112,7 @@ class DANetHead(nn.Module):
 
         if self.training:
             losses = {}
-            losses["loss_sem_seg"] = (
-                    F.cross_entropy(x, targets, reduction="mean", ignore_index=self.ignore_value)
-                    * self.loss_weight
-            )
+            losses["loss_sem_seg"] = (F.cross_entropy(x, targets, reduction="mean", ignore_index=self.ignore_value))
             return [], losses
         else:
             return x, {}
