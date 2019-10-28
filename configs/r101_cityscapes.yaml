@@ -6,8 +6,8 @@ MODEL:
   DILATED_RESNET:
     DEPTH: 101
 DATASETS:
-  TRAIN: ("cityscapes_fine_seg_train",)
-  TEST: ("cityscapes_fine_seg_val",)
+  TRAIN: ("cityscapes_fine_sem_seg_train",)
+  TEST: ("cityscapes_fine_sem_seg_val",)
 SOLVER:
   IMS_PER_BATCH: 8
 OUTPUT_DIR: "./output/r101/cityscapes"

@@ -6,8 +6,8 @@ MODEL:
   DILATED_RESNET:
     DEPTH: 101
 DATASETS:
-  TRAIN: ("voc_2012_trainval",)
-  TEST: ("voc_2012_test",)
+  TRAIN: ("voc_2012_train",)
+  TEST: ("voc_2012_val",)
 SOLVER:
   IMS_PER_BATCH: 16
 OUTPUT_DIR: "./output/r101/voc"
