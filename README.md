@@ -72,7 +72,7 @@ Model evaluation can be done similarly:
 python train_net.py --config-file configs/r50.yaml --num-gpus 8 --eval-only MODEL.WEIGHTS checkpoints/model.pth
 ```
 
-## COCO Person Keypoint Detection Baselines with Keypoint R-CNN
+## Results
 <table><tbody>
 <!-- START TABLE -->
 <!-- TABLE HEADER -->
