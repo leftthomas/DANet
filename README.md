@@ -60,8 +60,7 @@ To train a model, run
 python train_net.py --config-file <config.yaml>
 ```
 
-For example, to launch end-to-end DANet training with ResNet-50 backbone on 8 GPUs,
-one should execute:
+For example, to launch end-to-end DANet training with ResNet-50 backbone on 8 GPUs, one should execute:
 ```bash
 python train_net.py --config-file configs/r50.yaml --num-gpus 8
 ```
