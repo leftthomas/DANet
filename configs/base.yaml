@@ -16,7 +16,7 @@ SOLVER:
   MAX_ITER: 24000
   IMS_PER_BATCH: 8
 INPUT:
-  MIN_SIZE_TRAIN: (800, 832, 864, 896, 928, 960, 992, 1024)
+  MIN_SIZE_TRAIN: (800, 832, 864, 896, 928, 960)
   MAX_SIZE_TRAIN: 960
   MIN_SIZE_TEST: 800
   MAX_SIZE_TEST: 960
@@ -24,6 +24,6 @@ DATASETS:
   TRAIN: ("cityscapes_fine_sem_seg_train",)
   TEST: ("cityscapes_fine_sem_seg_val",)
 TEST:
-  EVAL_PERIOD: 8000
+  EVAL_PERIOD: 30
 
 
