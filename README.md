@@ -72,6 +72,15 @@ python train_net.py --config-file configs/r50.yaml --num-gpus 8 --eval-only MODE
 ```
 
 ## Results
+There are some difference between this implementation and official implementation:
+1. No `Multi-Grid` and `Multi-Scale Testing`;
+2. The image sizes of `Multi-Scale Training` are (800, 832, 864, 896, 928, 960);
+3. Training step is set to `24000`;
+4. Learning rate policy is `WarmupMultiStepLR`;
+5. `Position Attention Module (PAM)` use the similar mechanism as `Channel Attention Module (CAM)`, just use the tensor
+and its transpose to compute the attention. 
+
+
 <table><tbody>
 <!-- START TABLE -->
 <!-- TABLE HEADER -->
