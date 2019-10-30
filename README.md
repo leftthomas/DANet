@@ -109,14 +109,14 @@ and its transpose to compute attention.
 		<!-- ROW: r101 -->
 		<tr>
 			<td align="center"><a href="configs/r101.yaml">R101</a></td>
-			<td align="center">0.315</td>
-			<td align="center">0.102</td>
-			<td align="center">5.0</td>
-			<td align="center">53.6</td>
-			<td align="center">0.102</td>
-			<td align="center">5.0</td>
-			<td align="center">53.6</td>
-			<td align="center"><a href="https://pan.baidu.com/s/18wRQbLQyqXA4ISloUGWTSA">model</a>&nbsp;|&nbsp;ga7k</td>
+			<td align="center">0.65</td>
+			<td align="center">0.16</td>
+			<td align="center">28.81</td>
+			<td align="center">94.29</td>
+			<td align="center">76.08</td>
+			<td align="center">67.57</td>
+			<td align="center">89.69</td>
+			<td align="center"><a href="https://pan.baidu.com/s/1eqt2U2gIBeE_UMtluCKIcQ">model</a>&nbsp;|&nbsp;xnvs</td>
 		</tr>
 	</tbody>
 </table>
