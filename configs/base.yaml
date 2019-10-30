@@ -24,6 +24,6 @@ DATASETS:
   TRAIN: ("cityscapes_fine_sem_seg_train",)
   TEST: ("cityscapes_fine_sem_seg_val",)
 TEST:
-  EVAL_PERIOD: 30
+  EVAL_PERIOD: 2000
 
 
