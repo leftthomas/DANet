@@ -96,7 +96,7 @@ and its transpose to compute attention.
 		<!-- TABLE BODY -->
 		<!-- ROW: r50 -->
 		<tr>
-			<td align="left"><a href="configs/r50.yaml">R50</a></td>
+			<td align="center"><a href="configs/r50.yaml">R50</a></td>
 			<td align="center">0.49</td>
 			<td align="center">0.12</td>
 			<td align="center">27.12</td>
@@ -108,7 +108,7 @@ and its transpose to compute attention.
 		</tr>
 		<!-- ROW: r101 -->
 		<tr>
-			<td align="left"><a href="configs/r101.yaml">R101</a></td>
+			<td align="center"><a href="configs/r101.yaml">R101</a></td>
 			<td align="center">0.315</td>
 			<td align="center">0.102</td>
 			<td align="center">5.0</td>
