@@ -84,7 +84,7 @@ and its transpose to compute attention.
 	<tbody>
 		<!-- START TABLE -->
 		<!-- TABLE HEADER -->
-		<th valign="bottom"><br/>Name<br/></th>
+		<th valign="bottom">Name<br/></th>
 		<th valign="bottom">train<br/>time<br/>(s/iter)</th>
 		<th valign="bottom">inference<br/>time<br/>(s/im)</th>
 		<th valign="bottom">train<br/>mem<br/>(GB)</th>
