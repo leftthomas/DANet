@@ -80,29 +80,34 @@ There are some difference between this implementation and official implementatio
 5. `Position Attention Module (PAM)` use the similar mechanism as `Channel Attention Module (CAM)`, just use the tensor
 and its transpose to compute the attention. 
 
-
-<table><tbody>
-<!-- START TABLE -->
-<!-- TABLE HEADER -->
-<th valign="bottom">Name</th>
-<th valign="bottom">lr<br/>sched</th>
-<th valign="bottom">train<br/>time<br/>(s/iter)</th>
-<th valign="bottom">inference<br/>time<br/>(s/im)</th>
-<th valign="bottom">train<br/>mem<br/>(GB)</th>
-<th valign="bottom">box<br/>AP</th>
-<th valign="bottom">kp.<br/>AP</th>
-<th valign="bottom">model id</th>
-<th valign="bottom">download</th>
-<!-- TABLE BODY -->
-<!-- ROW: keypoint_rcnn_R_50_FPN_1x -->
- <tr><td align="left"><a href="configs/r50_fpn.yaml">R50-FPN</a></td>
-<td align="center">1x</td>
-<td align="center">0.315</td>
-<td align="center">0.102</td>
-<td align="center">5.0</td>
-<td align="center">53.6</td>
-<td align="center">64.0</td>
-<td align="center">137261548</td>
-<td align="center"><a href="https://dl.fbaipublicfiles.com/detectron2/COCO-Keypoints/keypoint_rcnn_R_50_FPN_1x/137261548/model_final_04e291.pkl">model</a>&nbsp;|&nbsp;<a href="https://dl.fbaipublicfiles.com/detectron2/COCO-Keypoints/keypoint_rcnn_R_50_FPN_1x/137261548/metrics.json">metrics</a></td>
-</tr>
-</tbody></table>
+<table>
+	<tbody>
+		<!-- START TABLE -->
+		<!-- TABLE HEADER -->
+		<th valign="bottom">Name</th>
+		<th valign="bottom">train time (s/iter)</th>
+		<th valign="bottom">inference time (s/im)</th>
+		<th valign="bottom">train mem (GB)</th>
+		<th valign="bottom">mean IoU %</th>
+		<th valign="bottom">download</th>
+		<!-- TABLE BODY -->
+		<!-- ROW: r50 -->
+		<tr>
+			<td align="left"><a href="configs/r50.yaml">R50</a></td>
+			<td align="center">0.315</td>
+			<td align="center">0.102</td>
+			<td align="center">5.0</td>
+			<td align="center">53.6</td>
+			<td align="center"><a href="pan.baidu.com/aaa">model</a>&nbsp;|&nbsp;abcd</td>
+		</tr>
+		<!-- ROW: r50 -->
+		<tr>
+			<td align="left"><a href="configs/r50.yaml">R50</a></td>
+			<td align="center">0.315</td>
+			<td align="center">0.102</td>
+			<td align="center">5.0</td>
+			<td align="center">53.6</td>
+			<td align="center"><a href="pan.baidu.com/aaa">model</a>&nbsp;|&nbsp;abcd</td>
+		</tr>
+	</tbody>
+</table>
