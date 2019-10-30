@@ -102,7 +102,7 @@ and its transpose to compute the attention.
 		</tr>
 		<!-- ROW: r101 -->
 		<tr>
-			<td align="left"><a href="configs/r101.yaml">R50</a></td>
+			<td align="left"><a href="configs/r101.yaml">R101</a></td>
 			<td align="center">0.315</td>
 			<td align="center">0.102</td>
 			<td align="center">5.0</td>
