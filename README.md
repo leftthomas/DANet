@@ -77,8 +77,8 @@ There are some difference between this implementation and official implementatio
 2. The image sizes of `Multi-Scale Training` are (800, 832, 864, 896, 928, 960);
 3. Training step is set to `24000`;
 4. Learning rate policy is `WarmupMultiStepLR`;
-5. `Position Attention Module (PAM)` use the similar mechanism as `Channel Attention Module (CAM)`, just use the tensor
-and its transpose to compute the attention. 
+5. `Position Attention Module (PAM)` uses the similar mechanism as `Channel Attention Module (CAM)`, just uses the tensor
+and its transpose to compute attention. 
 
 <table>
 	<tbody>
