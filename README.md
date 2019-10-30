@@ -88,7 +88,10 @@ and its transpose to compute attention.
 		<th valign="bottom">train time (s/iter)</th>
 		<th valign="bottom">inference time (s/im)</th>
 		<th valign="bottom">train mem (GB)</th>
+		<th valign="bottom">pixel accuracy %</th>
+		<th valign="bottom">mean PA %</th>
 		<th valign="bottom">mean IoU %</th>
+		<th valign="bottom">FW IoU %</th>
 		<th valign="bottom">download link</th>
 		<!-- TABLE BODY -->
 		<!-- ROW: r50 -->
@@ -98,12 +101,18 @@ and its transpose to compute attention.
 			<td align="center">0.102</td>
 			<td align="center">5.0</td>
 			<td align="center">53.6</td>
+			<td align="center">0.102</td>
+			<td align="center">5.0</td>
+			<td align="center">53.6</td>
 			<td align="center"><a href="pan.baidu.com/aaa">model</a>&nbsp;|&nbsp;abcd</td>
 		</tr>
 		<!-- ROW: r101 -->
 		<tr>
 			<td align="left"><a href="configs/r101.yaml">R101</a></td>
 			<td align="center">0.315</td>
+			<td align="center">0.102</td>
+			<td align="center">5.0</td>
+			<td align="center">53.6</td>
 			<td align="center">0.102</td>
 			<td align="center">5.0</td>
 			<td align="center">53.6</td>
