@@ -84,15 +84,15 @@ and its transpose to compute attention.
 	<tbody>
 		<!-- START TABLE -->
 		<!-- TABLE HEADER -->
-		<th valign="bottom">Name<br/></th>
-		<th valign="bottom">train<br/>time<br/>(s/iter)</th>
-		<th valign="bottom">inference<br/>time<br/>(s/im)</th>
-		<th valign="bottom">train<br/>mem<br/>(GB)</th>
-		<th valign="bottom">pixel<br/>accuracy<br/>%</th>
-		<th valign="bottom">mean<br/>PA<br/>%</th>
-		<th valign="bottom">mean<br/>IoU<br/>%</th>
-		<th valign="bottom">FW<br/>IoU<br/>%</th>
-		<th valign="bottom">results<br/>download<br/>link</th>
+		<th valign="bottom">Name</th>
+		<th valign="bottom">train time (s/iter)</th>
+		<th valign="bottom">inference time (s/im)</th>
+		<th valign="bottom">train mem< (GB)</th>
+		<th valign="bottom">pixel accuracy %</th>
+		<th valign="bottom">mean PA %</th>
+		<th valign="bottom">mean IoU %</th>
+		<th valign="bottom">FW IoU %</th>
+		<th valign="bottom">download link</th>
 		<!-- TABLE BODY -->
 		<!-- ROW: r50 -->
 		<tr>
