@@ -97,14 +97,14 @@ and its transpose to compute attention.
 		<!-- ROW: r50 -->
 		<tr>
 			<td align="left"><a href="configs/r50.yaml">R50</a></td>
-			<td align="center">0.315</td>
-			<td align="center">0.102</td>
-			<td align="center">5.0</td>
-			<td align="center">53.6</td>
-			<td align="center">0.102</td>
-			<td align="center">5.0</td>
-			<td align="center">53.6</td>
-			<td align="center"><a href="pan.baidu.com/aaa">model</a>&nbsp;|&nbsp;abcd</td>
+			<td align="center">0.49</td>
+			<td align="center">0.12</td>
+			<td align="center">27.12</td>
+			<td align="center">94.19</td>
+			<td align="center">75.31</td>
+			<td align="center">66.64</td>
+			<td align="center">89.54</td>
+			<td align="center"><a href="https://pan.baidu.com/s/18wRQbLQyqXA4ISloUGWTSA">model</a>&nbsp;|&nbsp;ga7k</td>
 		</tr>
 		<!-- ROW: r101 -->
 		<tr>
@@ -116,7 +116,7 @@ and its transpose to compute attention.
 			<td align="center">0.102</td>
 			<td align="center">5.0</td>
 			<td align="center">53.6</td>
-			<td align="center"><a href="pan.baidu.com/aaa">model</a>&nbsp;|&nbsp;abcd</td>
+			<td align="center"><a href="https://pan.baidu.com/s/18wRQbLQyqXA4ISloUGWTSA">model</a>&nbsp;|&nbsp;ga7k</td>
 		</tr>
 	</tbody>
 </table>
